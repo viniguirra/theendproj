@@ -1,0 +1,123 @@
+{
+  "version": 1,
+  "author": "Você",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-pi-pico",
+      "id": "pico",
+      "top": 100,
+      "left": 100,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "pot",
+      "top": 50,
+      "left": 300,
+      "attrs": {
+        "value": "50"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led-verde",
+      "top": 200,
+      "left": 300,
+      "attrs": {
+        "color": "green"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led-vermelho",
+      "top": 200,
+      "left": 400,
+      "attrs": {
+        "color": "red"
+      }
+    },
+    {
+      "type": "wokwi-buzzer",
+      "id": "buzzer",
+      "top": 300,
+      "left": 300,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": 200,
+      "left": 250,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r2",
+      "top": 200,
+      "left": 350,
+      "attrs": {
+        "value": "220"
+      }
+    }
+  ],
+  "connections": [
+    {
+      "from": "pico:GP26",
+      "to": "pot:1",
+      "color": "yellow"
+    },
+    {
+      "from": "pico:3V3",
+      "to": "pot:3",
+      "color": "red"
+    },
+    {
+      "from": "pico:GND",
+      "to": "pot:2",
+      "color": "black"
+    },
+    {
+      "from": "pico:GP16",
+      "to": "r1:1",
+      "color": "blue"
+    },
+    {
+      "from": "r1:2",
+      "to": "led-verde:A",
+      "color": "blue"
+    },
+    {
+      "from": "led-verde:C",
+      "to": "pico:GND",
+      "color": "black"
+    },
+    {
+      "from": "pico:GP17",
+      "to": "r2:1",
+      "color": "blue"
+    },
+    {
+      "from": "r2:2",
+      "to": "led-vermelho:A",
+      "color": "blue"
+    },
+    {
+      "from": "led-vermelho:C",
+      "to": "pico:GND",
+      "color": "black"
+    },
+    {
+      "from": "pico:GP18",
+      "to": "buzzer:1",
+      "color": "blue"
+    },
+    {
+      "from": "buzzer:2",
+      "to": "pico:GND",
+      "color": "black"
+    }
+  ]
+}
