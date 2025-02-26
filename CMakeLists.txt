@@ -1,66 +1,39 @@
-# Generated Cmake Pico project file
+# Versão mínima do CMake necessária
+cmake_minimum_required(VERSION 3.12)
 
-cmake_minimum_required(VERSION 3.13)
+# Nome do projeto
+project(TemperatureMonitor C CXX ASM)
 
-set(CMAKE_C_STANDARD 11)
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+# Inclui as configurações padrão do Raspberry Pi Pico SDK
+include($ENV{PICO_SDK_PATH}/external/pico_sdk_import.cmake)
 
-# Initialise pico_sdk from installed location
-# (note this can come from environment, CMake cache etc)
-
-# == DO NOT EDIT THE FOLLOWING LINES for the Raspberry Pi Pico VS Code Extension to work ==
-if(WIN32)
-    set(USERHOME $ENV{USERPROFILE})
-else()
-    set(USERHOME $ENV{HOME})
-endif()
-set(sdkVersion 2.1.0)
-set(toolchainVersion 13_3_Rel1)
-set(picotoolVersion 2.1.0)
-set(picoVscode ${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
-if (EXISTS ${picoVscode})
-    include(${picoVscode})
-endif()
-# ====================================================================================
-set(PICO_BOARD pico_w CACHE STRING "Board type")
-
-# Pull in Raspberry Pi Pico SDK (must be before project)
-include(pico_sdk_import.cmake)
-
-project(tarefa_04_02 C CXX ASM)
-
-# Initialise the Raspberry Pi Pico SDK
+# Inicializa o SDK do Raspberry Pi Pico
 pico_sdk_init()
 
-# Add executable. Default name is the project name, version 0.1
-
-add_executable(tarefa_04_02 tarefa_04_02.c inc/ssd1306.c)
-
-pico_set_program_name(tarefa_04_02 "tarefa_04_02")
-pico_set_program_version(tarefa_04_02 "0.1")
-
-# Generate PIO header
-pico_generate_pio_header(tarefa_04_02 ${CMAKE_CURRENT_LIST_DIR}/ws2812.pio)
-
-# Modify the below lines to enable/disable output over UART/USB
-pico_enable_stdio_uart(tarefa_04_02 1)
-pico_enable_stdio_usb(tarefa_04_02 1)
-
-# Add the standard library to the build
-target_link_libraries(tarefa_04_02
-        pico_stdlib)
-
-# Add the standard include files to the build
-target_include_directories(tarefa_04_02 PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}
+# Adiciona o executável do projeto
+add_executable(TemperatureMonitor
+    main.c
 )
 
-# Add any user requested libraries
-target_link_libraries(tarefa_04_02 
-        hardware_i2c
-        hardware_pio
-        )   
+# Vincula o executável ao SDK do Raspberry Pi Pico
+target_link_libraries(TemperatureMonitor pico_stdlib)
 
-pico_add_extra_outputs(tarefa_04_02)
+# Habilita a saída de depuração (USB/UART)
+pico_enable_stdio_usb(TemperatureMonitor 1)
+pico_enable_stdio_uart(TemperatureMonitor 1)
 
+# Adiciona bibliotecas específicas para Wi-Fi (se necessário)
+target_link_libraries(TemperatureMonitor hardware_pwm)
+target_link_libraries(TemperatureMonitor hardware_adc)
+
+# Configurações adicionais para o Pico W (Wi-Fi)
+if (PICO_BOARD STREQUAL "pico_w")
+    target_link_libraries(TemperatureMonitor pico_cyw43_arch_none)
+    target_compile_definitions(TemperatureMonitor PUBLIC PICO_CYW43_ARCH_POLL=1)
+endif()
+
+# Configurações de otimização e depuração
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -g")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -g")
